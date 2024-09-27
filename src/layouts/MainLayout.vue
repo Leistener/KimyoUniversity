@@ -1,12 +1,13 @@
 <script setup>
 import SubLayout from "src/components/layout/SubLayout/SubLayout.vue";
 import FooterLayout from "src/components/layout/FooterLayout.vue";
+import { useToastification } from 'src/helpers/tastification';
 import { useLayoutStore } from "../stores/layout.ts";
 import { onMounted, ref } from "vue";
 import { useQuasar } from "quasar";
 import { useI18n } from "vue-i18n";
-import TestLayout from "src/components/layout/TestLayout.vue";
 
+const {toast} = useToastification()
 const { t, locale } = useI18n();
 const $q = useQuasar();
 const layoutStore = useLayoutStore();
@@ -35,7 +36,6 @@ function darkMode() {
 const updateScreenSize = () => {
   screenSize.value = { width: window.innerWidth, height: window.innerHeight };
 };
-
 const scrollTop = ref(false);
 const floating = ref(false);
 
@@ -45,6 +45,13 @@ onMounted(() => {
   model.value = locale.value.split("-")[0];
   window.addEventListener("resize", updateScreenSize);
   $q.dark.set(localStorage.getItem("darkMode") === "true");
+  toast({
+        position: 'top-right',
+        type: 'negative',
+        message: 'Sayt test rejimida ishlamoqda. Xatoliklar tez orada bartaraf etiladi',
+        time: 6000
+      });
+
 });
 
 // scrolling
@@ -61,14 +68,8 @@ function change() {
     <q-header class="relative-position">
       <!--   contact nav   -->
       <q-toolbar
-      class="q-p-none"
-        :style="scrollTop ? 'position: fixed' : 'position: sticky;'"
-      >
-      <div style="width: 100%;">
-        <TestLayout />
-        <div
-        class="nav__contact flex justify-between items-center q-py-sm"
-        
+      class="nav__contact flex justify-between items-center q-py-sm"
+        :style="scrollTop ? 'position: fixed; ' : 'position: sticky; '"
       >
     <div class="q-ml-md">
           <span class="text-white">
@@ -119,13 +120,7 @@ function change() {
               size="16px"
             />
           </div>
-        </div>
-    </div>
-      </div>
-        
-        
-        
-       
+        </div>       
       </q-toolbar>
 
       <!--   main nav   -->
